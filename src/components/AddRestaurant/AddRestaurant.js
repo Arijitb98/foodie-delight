@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { mockRestaurants } from '../../Data/Data';
+import { addRestaurant } from '../../Data/Data';
+import './styles.css'; // Import the CSS file
 
 const AddRestaurant = () => {
   const navigate = useNavigate();
@@ -24,48 +25,52 @@ const AddRestaurant = () => {
   });
 
   const onSubmit = (values, { setSubmitting }) => {
-    const newRestaurant = { id: (mockRestaurants.length + 1).toString(), ...values };
-    mockRestaurants.push(newRestaurant);
+    addRestaurant(values); // Call addRestaurant function to add new restaurant
     alert('Restaurant added successfully!');
-    navigate('/restaurants');
+    navigate('/restaurants'); // Navigate back to restaurants list after adding
     setSubmitting(false);
   };
 
   return (
-    <div>
-      <h2>Add Restaurant</h2>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <label htmlFor="name">Name</label>
-              <Field type="text" id="name" name="name" />
-              <ErrorMessage name="name" component="div" />
-            </div>
-            <div>
-              <label htmlFor="description">Description</label>
-              <Field type="text" id="description" name="description" />
-              <ErrorMessage name="description" component="div" />
-            </div>
-            <div>
-              <label htmlFor="location">Location</label>
-              <Field type="text" id="location" name="location" />
-              <ErrorMessage name="location" component="div" />
-            </div>
-            <div>
-              <label htmlFor="contactNumber">Contact Number</label>
-              <Field type="text" id="contactNumber" name="contactNumber" />
-              <ErrorMessage name="contactNumber" component="div" />
-            </div>
-            <div>
-              <label htmlFor="openingHours">Opening Hours</label>
-              <Field type="text" id="openingHours" name="openingHours" />
-              <ErrorMessage name="openingHours" component="div" />
-            </div>
-            <button type="submit" disabled={isSubmitting}>Add Restaurant</button>
-          </Form>
-        )}
-      </Formik>
+    <div className="container">
+      <div className="form-wrapper">
+        <h2 className="form-title">Add New Restaurant</h2>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="form-field">
+                <label htmlFor="name" className="label">Name</label>
+                <Field type="text" id="name" name="name" className="input-field" />
+                <ErrorMessage name="name" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="description" className="label">Description</label>
+                <Field type="text" id="description" name="description" className="input-field" />
+                <ErrorMessage name="description" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="location" className="label">Location</label>
+                <Field type="text" id="location" name="location" className="input-field" />
+                <ErrorMessage name="location" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="contactNumber" className="label">Contact Number</label>
+                <Field type="text" id="contactNumber" name="contactNumber" className="input-field" />
+                <ErrorMessage name="contactNumber" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="openingHours" className="label">Opening Hours</label>
+                <Field type="text" id="openingHours" name="openingHours" className="input-field" />
+                <ErrorMessage name="openingHours" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <button type="submit" className="submit-button" disabled={isSubmitting}>Add Restaurant</button>
+                <button type="button" className="back-button" onClick={() => navigate('/restaurants')}>Back</button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 };

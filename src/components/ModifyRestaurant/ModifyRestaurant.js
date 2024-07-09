@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { getRestaurantById, updateRestaurantById } from '../../Data/Data';
+import './styles.css'; // Import the CSS file
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ModifyRestaurant = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -30,7 +32,7 @@ const ModifyRestaurant = () => {
         setInitialValues(restaurant);
       } else {
         alert('Restaurant not found');
-        navigate('/restaurants');
+        navigate('/restaurants'); // Navigate to restaurants list if restaurant not found
       }
     };
 
@@ -40,45 +42,50 @@ const ModifyRestaurant = () => {
   const onSubmit = (values, { setSubmitting }) => {
     updateRestaurantById(id, values);
     alert('Restaurant updated successfully!');
-    navigate('/restaurants');
+    navigate('/restaurants'); // Navigate back to restaurants list after update
     setSubmitting(false);
   };
 
   return (
-    <div>
-      <h2>Modify Restaurant</h2>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <label htmlFor="name">Name</label>
-              <Field type="text" id="name" name="name" />
-              <ErrorMessage name="name" component="div" />
-            </div>
-            <div>
-              <label htmlFor="description">Description</label>
-              <Field type="text" id="description" name="description" />
-              <ErrorMessage name="description" component="div" />
-            </div>
-            <div>
-              <label htmlFor="location">Location</label>
-              <Field type="text" id="location" name="location" />
-              <ErrorMessage name="location" component="div" />
-            </div>
-            <div>
-              <label htmlFor="contactNumber">Contact Number</label>
-              <Field type="text" id="contactNumber" name="contactNumber" />
-              <ErrorMessage name="contactNumber" component="div" />
-            </div>
-            <div>
-              <label htmlFor="openingHours">Opening Hours</label>
-              <Field type="text" id="openingHours" name="openingHours" />
-              <ErrorMessage name="openingHours" component="div" />
-            </div>
-            <button type="submit" disabled={isSubmitting}>Update Restaurant</button>
-          </Form>
-        )}
-      </Formik>
+    <div className="container">
+      <div className="form-wrapper">
+        <h2 className="form-title">Modify Restaurant</h2>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="form-field">
+                <label htmlFor="name" className="label">Name</label>
+                <Field type="text" id="name" name="name" className="input-field" />
+                <ErrorMessage name="name" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="description" className="label">Description</label>
+                <Field type="text" id="description" name="description" className="input-field" />
+                <ErrorMessage name="description" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="location" className="label">Location</label>
+                <Field type="text" id="location" name="location" className="input-field" />
+                <ErrorMessage name="location" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="contactNumber" className="label">Contact Number</label>
+                <Field type="text" id="contactNumber" name="contactNumber" className="input-field" />
+                <ErrorMessage name="contactNumber" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <label htmlFor="openingHours" className="label">Opening Hours</label>
+                <Field type="text" id="openingHours" name="openingHours" className="input-field" />
+                <ErrorMessage name="openingHours" component="div" className="error-message" />
+              </div>
+              <div className="form-field">
+                <button type="submit" className="submit-button" disabled={isSubmitting}>Update Restaurant</button>
+                <button type="button" className="back-button" onClick={() => navigate('/restaurants')}>Back</button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 };

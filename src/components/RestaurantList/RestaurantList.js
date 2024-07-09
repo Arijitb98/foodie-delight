@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { mockRestaurants, updateRestaurantById } from '../../Data/Data';
+import './styles.css';  // Import the CSS file
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState(mockRestaurants);
@@ -22,16 +23,18 @@ const RestaurantList = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="container">
       <h1>Restaurants</h1>
       <ul>
         {restaurants.map((restaurant) => (
-          <li key={restaurant.id}>
+          <li key={restaurant.id} className="restaurant">
             <h2>{restaurant.name}</h2>
             <p>{restaurant.description}</p>
             <p>{restaurant.location}</p>
-            <Link to={`/restaurants/edit/${restaurant.id}`}>Edit</Link>
-            <button onClick={() => deleteRestaurant(restaurant.id)}>Delete</button>
+            <div className="actions">
+              <Link to={`/restaurants/edit/${restaurant.id}`}>Edit</Link>
+              <button onClick={() => deleteRestaurant(restaurant.id)}>Delete</button>
+            </div>
           </li>
         ))}
       </ul>
