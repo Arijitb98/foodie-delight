@@ -1,0 +1,23 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header-wrapper {
+  width: 100%;
+  z-index: 2;
+  /* Ensure the header is on top of the sidebar */
+}
+
+.content-wrapper {
+  display: flex;
+  flex-grow: 1;
+}
+
+.content {
+  margin-left: 250px;
+  /* Same width as the sidebar */
+  padding: 20px;
+  flex-grow: 1;
+}

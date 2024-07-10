@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container1">
       <div className="form-wrapper">
         <h2 className="title">Login</h2>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

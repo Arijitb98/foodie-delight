@@ -1,11 +1,11 @@
-.form-container-addRestaurant {
+.form-container-addVendor {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.form-wrapper-addRestaurant {
+.form-wrapper-addVendor {
   background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -13,23 +13,24 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-title-addRestaurant {
+.form-title-addVendor {
   font-size: 24px;
   margin-bottom: 20px;
+  margin-top: 35px;
 }
 
-.form-field-addRestaurant {
+.form-field-addVendor {
   margin-bottom: 15px;
 }
 
-.label-addRestaurant {
+.label-addVendor {
   display: block;
   margin-bottom: 5px;
   font-size: 16px;
   color: #333333;
 }
 
-.input-field-addRestaurant {
+.input-field-addVendor {
   width: 98%;
   padding: 10px;
   font-size: 16px;
@@ -37,13 +38,13 @@
   border-radius: 4px;
 }
 
-.error-message-addRestaurant {
+.error-message-addVendor {
   color: #ff0000;
   font-size: 14px;
   margin-top: 5px;
 }
 
-.submit-button-addRestaurant {
+.submit-button-addVendor {
   background-color: #007bff;
   color: #ffffff;
   border: none;
@@ -54,13 +55,13 @@
   margin-right: 10px;
 }
 
-.submit-button-addRestaurant:disabled {
+.submit-button-addVendor:disabled {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
 }
 
-.back-button-addRestaurant {
+.back-button-addVendor {
   background-color: transparent;
   color: #007bff;
   border: 1px solid #007bff;
@@ -70,7 +71,7 @@
   cursor: pointer;
 }
 
-.back-button-addRestaurant:hover {
+.back-button-addVendor:hover {
   background-color: #007bff;
   color: #ffffff;
 }
