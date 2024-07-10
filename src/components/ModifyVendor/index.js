@@ -17,6 +17,7 @@ const ModifyVendor = () => {
     phoneNumber: '',
   });
   const [restaurants, setRestaurants] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required').max(100, 'Name is too long'),
@@ -81,6 +82,13 @@ const ModifyVendor = () => {
     },
   ];
 
+  // Filter restaurants based on the search query
+  const filteredRestaurants = restaurants.filter((restaurant) =>
+    restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    restaurant.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    restaurant.contactNumber.includes(searchQuery)
+  );
+
   return (
     <div className="form-container-modifyVendor">
       <div className="form-wrapper-modifyVendor">
@@ -111,18 +119,27 @@ const ModifyVendor = () => {
           )}
         </Formik>
       </div>
-      <div className="form-wrappe-modifyVendorr">
+      <div className="form-wrapper-modifyVendor">
         <h2 className="form-title-modifyVendor">Restaurants for {initialValues.name}</h2>
+        <div className="search-container-modifyVendor">
+          <input
+            type="text"
+            placeholder="Search restaurants..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input-modifyVendor"
+          />
+        </div>
         <div className="data-grid-container-modifyVendor">
           <DataGrid
-            rows={restaurants}
+            rows={filteredRestaurants}
             columns={restaurantColumns}
             pageSize={5}
             disableSelectionOnClick
           />
         </div>
         <div className="form-field-modifyVendor">
-          <button type="button" className="submit-button-modifyVendor" onClick={handleAddRestaurant}>Add Restaurant</button>
+          <button type="button" className="add-restaurant-button-modifyVendor" onClick={handleAddRestaurant}>Add Restaurant</button>
         </div>
       </div>
     </div>

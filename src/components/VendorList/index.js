@@ -9,6 +9,7 @@ const VendorList = () => {
   const [vendors, setVendors] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +52,12 @@ const VendorList = () => {
     },
   ];
 
+  // Filter vendors based on the search query
+  const filteredVendors = vendorsWithRestaurantCount.filter((vendor) =>
+    vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    vendor.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -59,9 +66,18 @@ const VendorList = () => {
         <h1>Vendors</h1>
         <button className="add-button" onClick={() => navigate('/vendors/add')}>Add Vendor</button>
       </div>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+      </div>
       <div className="data-grid-container">
         <DataGrid
-          rows={vendorsWithRestaurantCount}
+          rows={filteredVendors}
           columns={columns}
           pageSize={5}
           disableSelectionOnClick

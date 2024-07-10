@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { addVendor } from '../../Data/Vendors'; // Import addVendor function
 import './styles.css'; // Import the CSS file
 
-const AddVendorForm = () => {
+const AddVendor = () => {
   const navigate = useNavigate();
 
   const initialValues = {
@@ -63,4 +63,4 @@ const AddVendorForm = () => {
   );
 };
 
-export default AddVendorForm;
+export default AddVendor;

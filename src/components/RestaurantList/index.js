@@ -9,6 +9,7 @@ const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const RestaurantList = () => {
         await Promise.all([loadedRestaurants, loadedVendors]);
 
         const restaurantsWithVendorEmail = loadedRestaurants.map((restaurant) => {
-          const vendor = loadedVendors.find((v) => v.id == restaurant.vendorId);
+          const vendor = loadedVendors.find((v) => v.id === restaurant.vendorId);
           return {
             ...restaurant,
             vendorEmail: vendor ? vendor.email : 'N/A'
@@ -50,7 +51,6 @@ const RestaurantList = () => {
     alert('Restaurant deleted successfully');
   };
 
-  // Define columns for the DataGrid
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
@@ -70,10 +70,13 @@ const RestaurantList = () => {
     },
   ];
 
-  // Function to handle editing a restaurant
-  const handleEdit = (id) => {
-    navigate(`/restaurants/edit/${id}`);
-  };
+  // Filter restaurants based on the search query
+  const filteredRestaurants = restaurants.filter((restaurant) =>
+    restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    restaurant.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    restaurant.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    restaurant.vendorEmail.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -84,14 +87,21 @@ const RestaurantList = () => {
         <h1>Restaurants</h1>
         <button className="add-button" onClick={() => navigate('/restaurants/add')}>Add New Restaurant</button>
       </div>
-
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+      </div>
       <div className="data-grid-container">
         <DataGrid
-          rows={restaurants}
+          rows={filteredRestaurants}
           columns={columns}
-          pageSize={5} // Set a default page size
-          // checkboxSelection
-          disableSelectionOnClick // Optional: Disable row selection on click
+          pageSize={5}
+          disableSelectionOnClick
         />
       </div>
     </div>

@@ -21,8 +21,7 @@
 }
 
 .sidebar nav ul li {
-  padding: 15px 20px;
-  /* Increased padding for bigger items */
+  padding: 15px 10px;
 }
 
 .sidebar nav ul li a {
@@ -43,4 +42,6 @@
 
 .sidebar nav ul li a:hover {
   background-color: #555;
+  padding: 10px;
+  border-radius: 4px;
 }

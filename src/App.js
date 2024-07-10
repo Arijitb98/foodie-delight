@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import AddRestaurant from './components/AddRestaurant/AddRestaurant';
-import RestaurantList from './components/RestaurantList/RestaurantList';
-import ModifyRestaurant from './components/ModifyRestaurant/ModifyRestaurant';
-import Login from './components/Login/Login';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import Layout from './components/Layout/Layout';
-import Vendors from './components/Vendors/VendorList';
-import AddVendor from './components/AddVendor/AddVendor';
-import ModifyVendor from './components/ModifyVendor/ModifyVendor';
-import MenuCategories from './components/MenuCategories/MenuCategories';
-import AddMenuItem from './components/AddMenuItem/AddMenuItem';
+import RestaurantList from './components/RestaurantList/index';
+import RestaurantForm from './components/ManageRestaurant/index';
+import Login from './components/Login/index';
+import PrivateRoute from './services/PrivateRoute/PrivateRoute';
+import Layout from './services/Layout/Layout';
+import Vendors from './components/VendorList/index';
+import AddVendor from './components/ManageVendors/index';
+import ModifyVendor from './components/ModifyVendor/index';
+import PreDefinedMenuItems from './components/PreDefinedMenuItems/MenuItems';
+import MenuItemForm from './components/MenuItemForm/index';
+import PredefinedMenuItemForm from './components/PreDefinedMenuItems/index';
 
 function App() {
   return (
@@ -19,15 +19,18 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
-            <Route path="restaurants/add" element={<AddRestaurant />} />
-            <Route path="restaurants/edit/:id" element={<ModifyRestaurant />} />
+          <Route path="/" element={<Navigate to="/restaurants" />} />
+            <Route path="restaurants/add" element={<RestaurantForm />} />
+            <Route path="restaurants/edit/:id" element={<RestaurantForm />} />
             <Route path="restaurants" element={<RestaurantList />} />
-            <Route path="/restaurants/:restaurantId/menu-item/add" element={<AddMenuItem />} />
-            <Route path="/restaurants/:restaurantId/menu-item/edit/:menuItemId" element={<AddMenuItem />} />
+            <Route path="/restaurants/:restaurantId/menu-item/add" element={<MenuItemForm />} />
+            <Route path="/restaurants/:restaurantId/menu-item/edit/:menuItemId" element={<MenuItemForm />} />
             <Route path="vendors" element={<Vendors />} />
             <Route path="vendors/add" element={<AddVendor />} />
             <Route path="vendors/edit/:id" element={<ModifyVendor />} />
-            <Route path="menu-categories" element={<MenuCategories />} />
+            <Route path="menu-categories" element={<PreDefinedMenuItems />} />
+            <Route path="/default-menu-items/edit/:menuItemId" element={<PredefinedMenuItemForm />} />
+            <Route path="/default-menu-items/add" element={<PredefinedMenuItemForm />} />
           </Route>
         </Route>
         <Route path="/" element={<Navigate to="/login" />} />

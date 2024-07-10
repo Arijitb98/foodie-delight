@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { getRestaurantById, updateRestaurantById } from '../../Data/Restaurants';
+import { addRestaurant, getRestaurantById, updateRestaurantById } from '../../Data/Restaurants';
 import {
   loadMenuItems,
   addMenuItem,
@@ -11,12 +11,15 @@ import {
   deleteMenuItemById,
 } from '../../Data/MenuItems';
 import { DataGrid } from '@mui/x-data-grid';
+import { loadVendors } from '../../Data/Vendors';
 import './styles.css'; // Import the CSS file
 
-const ModifyRestaurant = () => {
+const RestaurantForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const vendors = loadVendors();
+  const { vendorId } = location.state || {};
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -24,9 +27,11 @@ const ModifyRestaurant = () => {
     contactNumber: '',
     openingHour: '', // Separate field for opening hour
     closingHour: '', // Separate field for closing hour
-    vendorId: '',
+    vendorId: vendorId || '', // Preselect the vendor if provided
+    image: null,
   });
   const [menuItems, setMenuItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required').max(100, 'Name is too long'),
@@ -35,11 +40,12 @@ const ModifyRestaurant = () => {
     contactNumber: Yup.string().matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits').required('Phone number is required'),
     openingHour: Yup.string().required('Opening Hour is required'),
     closingHour: Yup.string().required('Closing Hour is required'),
-    vendorId: Yup.string().required('Vendor is required')
+    vendorId: Yup.string().required('Vendor is required'),
+    image: Yup.mixed().test('fileSize', 'File Size is too large', value => !value || (value && value.size <= 1024 * 1024))
   });
 
   useEffect(() => {
-    const fetchRestaurant = async () => {
+    if (id) {
       const restaurant = getRestaurantById(id);
       if (restaurant) {
         setInitialValues(restaurant);
@@ -48,14 +54,17 @@ const ModifyRestaurant = () => {
         alert('Restaurant not found');
         navigate('/restaurants');
       }
-    };
-
-    fetchRestaurant();
+    }
   }, [id, navigate]);
 
   const onSubmit = (values, { setSubmitting }) => {
-    updateRestaurantById(id, values);
-    alert('Restaurant updated successfully!');
+    if (id) {
+      updateRestaurantById(id, values);
+      alert('Restaurant updated successfully!');
+    } else {
+      addRestaurant(values);
+      alert('Restaurant added successfully!');
+    }
     if (location.state && location.state.fromVendor) {
       navigate(`/vendors/edit/${location.state.vendorId}`);
     } else {
@@ -78,7 +87,7 @@ const ModifyRestaurant = () => {
   };
 
   const menuItemColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    // { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'price', headerName: 'Price', width: 150 },
     { field: 'category', headerName: 'Category', width: 150 },
@@ -95,10 +104,16 @@ const ModifyRestaurant = () => {
     },
   ];
 
+  // Filter menu items based on the search query
+  const filteredMenuItems = menuItems.filter((menuItem) =>
+    menuItem.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    menuItem.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="form-container-restaurantEdit">
       <div className="form-wrapper-restaurantEdit">
-        <h2 className="form-title-restaurantEdit">Modify Restaurant</h2>
+        <h2 className="form-title-restaurantEdit">{id ? 'Edit Restaurant' : 'Add Restaurant'}</h2>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
           {({ isSubmitting }) => (
             <Form>
@@ -146,11 +161,27 @@ const ModifyRestaurant = () => {
 
               <div className="form-field-restaurantEdit">
                 <label htmlFor="vendorId" className="label-restaurantEdit">Vendor</label>
-                <Field type="text" id="vendorId" name="vendorId" className="input-field-restaurantEdit" disabled />
+                <Field
+                  as="select"
+                  id="vendorId"
+                  name="vendorId"
+                  className="input-field-restaurantEdit"
+                  disabled={!!vendorId} // Disable when vendorId is present
+                >
+                  <option value="">Select Vendor</option>
+                  {vendors.map((vendor) => (
+                    <option key={vendor.id} value={vendor.id}>
+                      {vendor.name}
+                    </option>
+                  ))}
+                </Field>
                 <ErrorMessage name="vendorId" component="div" className="error-message-restaurantEdit" />
               </div>
+
               <div className="form-field-restaurantEdit">
-                <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting}>Update Restaurant</button>
+                <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting}>
+                  {id ? 'Update Restaurant' : 'Add Restaurant'}
+                </button>
                 <button type="button" className="back-button-restaurantEdit" onClick={() => {
                   if (location.state && location.state.fromVendor) {
                     navigate(`/vendors/edit/${location.state.vendorId}`);
@@ -163,17 +194,27 @@ const ModifyRestaurant = () => {
           )}
         </Formik>
       </div>
-      <div className="menu-item-section-restaurantEdit">
+      {id ? <div className="menu-item-section-restaurantEdit">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h3 style={{ flex: '1 0 auto' }}>Menu Items</h3>
-          <button onClick={handleAddMenuItem}>Add Menu Item</button>
+          <button onClick={handleAddMenuItem} className="menu-item-button-restaurantEdit">Add Menu Item</button>
+        </div>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search menu items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
         </div>
         <div style={{ height: 400, width: '100%' }}>
-          <DataGrid rows={menuItems} columns={menuItemColumns} pageSize={5} />
+          <DataGrid rows={filteredMenuItems} columns={menuItemColumns} pageSize={5} />
         </div>
       </div>
+      : <></>}
     </div>
   );
 };
 
-export default ModifyRestaurant;
+export default RestaurantForm;

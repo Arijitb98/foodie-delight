@@ -45,3 +45,19 @@ button {
 button:hover {
   background-color: #f44336;
 }
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

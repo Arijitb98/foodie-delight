@@ -1,11 +1,11 @@
-.form-container-addMenuItem {
+.form-container-restaurantEdit {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.form-wrapper-addMenuItem {
+.form-wrapper-restaurantEdit {
   background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -13,23 +13,23 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-title-addMenuItem {
+.form-title-restaurantEdit {
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.form-field-addMenuItem {
+.form-field-restaurantEdit {
   margin-bottom: 15px;
 }
 
-.label-addMenuItem {
+.label-restaurantEdit {
   display: block;
   margin-bottom: 5px;
   font-size: 16px;
   color: #333333;
 }
 
-.input-field-addMenuItem {
+.input-field-restaurantEdit {
   width: 98%;
   padding: 10px;
   font-size: 16px;
@@ -37,13 +37,13 @@
   border-radius: 4px;
 }
 
-.error-message-addMenuItem {
+.error-message-restaurantEdit {
   color: #ff0000;
   font-size: 14px;
   margin-top: 5px;
 }
 
-.submit-button-addMenuItem {
+.submit-button-restaurantEdit {
   background-color: #007bff;
   color: #ffffff;
   border: none;
@@ -54,13 +54,13 @@
   margin-right: 10px;
 }
 
-.submit-button-addMenuItem:disabled {
+.submit-button-restaurantEdit:disabled {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
 }
 
-.back-button-addMenuItem {
+.back-button-restaurantEdit {
   background-color: transparent;
   color: #007bff;
   border: 1px solid #007bff;
@@ -70,18 +70,23 @@
   cursor: pointer;
 }
 
-.back-button-addMenuItem:hover {
+.back-button-restaurantEdit:hover {
   background-color: #007bff;
   color: #ffffff;
 }
 
-.image-preview-addMenuItem {
-  margin-top: 10px;
+.search-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.image-preview-addMenuItem img {
-  max-width: 100%;
-  height: auto;
+.search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 8px;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  padding: 5px;
+  border-radius: 4px;
 }

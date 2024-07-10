@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-content">
-        <h1 className="app-name">FOODIEDELIGHT</h1>
+        <h1 className="app-name">FOODIE DELIGHT</h1>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>
     </header>

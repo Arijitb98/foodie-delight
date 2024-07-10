@@ -1,11 +1,11 @@
-.form-container-modifyVendor {
+.form-container-addMenuItem {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.form-wrapper-modifyVendor {
+.form-wrapper-addMenuItem {
   background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -13,23 +13,23 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-title-modifyVendor {
+.form-title-addMenuItem {
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.form-field-modifyVendor {
+.form-field-addMenuItem {
   margin-bottom: 15px;
 }
 
-.label-modifyVendor {
+.label-addMenuItem {
   display: block;
   margin-bottom: 5px;
   font-size: 16px;
   color: #333333;
 }
 
-.input-field-modifyVendor {
+.input-field-addMenuItem {
   width: 98%;
   padding: 10px;
   font-size: 16px;
@@ -37,13 +37,13 @@
   border-radius: 4px;
 }
 
-.error-message-modifyVendor {
+.error-message-addMenuItem {
   color: #ff0000;
   font-size: 14px;
   margin-top: 5px;
 }
 
-.submit-button-modifyVendor {
+.submit-button-addMenuItem {
   background-color: #007bff;
   color: #ffffff;
   border: none;
@@ -54,13 +54,13 @@
   margin-right: 10px;
 }
 
-.submit-button-modifyVendor:disabled {
+.submit-button-addMenuItem:disabled {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
 }
 
-.back-button-modifyVendor {
+.back-button-addMenuItem {
   background-color: transparent;
   color: #007bff;
   border: 1px solid #007bff;
@@ -70,19 +70,60 @@
   cursor: pointer;
 }
 
-.back-button-modifyVendor:hover {
+.back-button-addMenuItem:hover {
   background-color: #007bff;
   color: #ffffff;
 }
 
-.search-container-modifyVendor {
+.image-preview-addMenuItem {
+  margin-top: 10px;
+}
+
+.image-preview-addMenuItem img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.preset-food-items-wrapper {
+  margin-top: 20px;
+}
+
+.preset-food-items-title {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.add-preset-button {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.add-preset-button:hover {
+  background-color: #f44336;
+}
+
+.data-grid-container-addMenuItem {
+  height: 400px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.search-container {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
 }
 
-.search-input-modifyVendor {
+.search-input {
   width: 100%;
   max-width: 600px;
   padding: 8px;
