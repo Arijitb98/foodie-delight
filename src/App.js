@@ -11,6 +11,7 @@ import ModifyVendor from './components/ModifyVendor/index';
 import PreDefinedMenuItems from './components/PreDefinedMenuItems/MenuItems';
 import MenuItemForm from './components/MenuItemForm/index';
 import PredefinedMenuItemForm from './components/PreDefinedMenuItems/index';
+import Settings from './components/Settings/index';
 
 function App() {
   return (
@@ -19,21 +20,22 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Navigate to="/restaurants" />} />
-            <Route path="restaurants/add" element={<RestaurantForm />} />
-            <Route path="restaurants/edit/:id" element={<RestaurantForm />} />
-            <Route path="restaurants" element={<RestaurantList />} />
+            <Route index element={<Navigate to="/restaurants" />} />
+            <Route path="/restaurants" element={<RestaurantList />} />
+            <Route path="/restaurants/add" element={<RestaurantForm />} />
+            <Route path="/restaurants/edit/:id" element={<RestaurantForm />} />
             <Route path="/restaurants/:restaurantId/menu-item/add" element={<MenuItemForm />} />
             <Route path="/restaurants/:restaurantId/menu-item/edit/:menuItemId" element={<MenuItemForm />} />
-            <Route path="vendors" element={<Vendors />} />
-            <Route path="vendors/add" element={<AddVendor />} />
-            <Route path="vendors/edit/:id" element={<ModifyVendor />} />
-            <Route path="menu-categories" element={<PreDefinedMenuItems />} />
+            <Route path="/vendors" element={<Vendors />} />
+            <Route path="/vendors/add" element={<AddVendor />} />
+            <Route path="/vendors/edit/:id" element={<ModifyVendor />} />
+            <Route path="/menu-categories" element={<PreDefinedMenuItems />} />
             <Route path="/default-menu-items/edit/:menuItemId" element={<PredefinedMenuItemForm />} />
             <Route path="/default-menu-items/add" element={<PredefinedMenuItemForm />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

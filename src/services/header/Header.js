@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './styles.css'; // Import the CSS file for styling
+import './styles.css';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-content">
-        <h1 className="app-name">FOODIE DELIGHT</h1>
+        <h1 className="app-name">FoodieDelight</h1>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>
     </header>

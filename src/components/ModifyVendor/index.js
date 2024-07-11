@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { getVendorById, updateVendorById } from '../../Data/Vendors';
 import { loadRestaurants, deleteRestaurantById } from '../../Data/Restaurants';
 import { DataGrid } from '@mui/x-data-grid';
-import './styles.css'; // Import the CSS file
+import './styles.css';
 
 const ModifyVendor = () => {
   const { id } = useParams();
@@ -60,8 +60,8 @@ const ModifyVendor = () => {
   };
 
   const restaurantColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'id', headerName: 'ID', width: 40 },
+    { field: 'name', headerName: 'Name', width: 180 },
     { field: 'location', headerName: 'Location', width: 200 },
     { field: 'contactNumber', headerName: 'Contact Number', width: 150 },
     {

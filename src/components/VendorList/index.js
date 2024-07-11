@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { loadVendors, deleteVendorById } from '../../Data/Vendors';
 import { loadRestaurants } from '../../Data/Restaurants';
-import './styles.css'; // Import the CSS file
+import './styles.css';
 
 const VendorList = () => {
   const [vendors, setVendors] = useState([]);
@@ -27,7 +27,7 @@ const VendorList = () => {
 
   // Function to handle vendor deletion
   const handleDeleteVendor = (id) => {
-    deleteVendorById(id); // Update local storage or API
+    deleteVendorById(id);
     // Reload vendors after deletion
     setVendors(loadVendors());
     alert('Vendor deleted successfully');
@@ -35,9 +35,9 @@ const VendorList = () => {
 
   // Define columns for the DataGrid
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'email', headerName: 'Email', width: 250 },
+    { field: 'id', headerName: 'ID', width: 40 },
+    { field: 'name', headerName: 'Name', width: 180 },
+    { field: 'email', headerName: 'Email', width: 200 },
     { field: 'restaurantCount', headerName: 'Number of Restaurants', width: 200 },
     {
       field: 'actions',

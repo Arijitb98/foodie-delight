@@ -1,3 +1,4 @@
+//Mock Data
 const dummyFoodData = {
   1: [
     { id: 1, name: 'Burger', price: 10.99, category: 'Fast Food' },

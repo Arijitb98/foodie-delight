@@ -12,7 +12,7 @@ import {
 } from '../../Data/MenuItems';
 import { DataGrid } from '@mui/x-data-grid';
 import { loadVendors } from '../../Data/Vendors';
-import './styles.css'; // Import the CSS file
+import './styles.css';
 
 const RestaurantForm = () => {
   const { id } = useParams();
@@ -29,10 +29,10 @@ const RestaurantForm = () => {
     description: '',
     location: '',
     contactNumber: '',
-    openingHour: '', // Separate field for opening hour
-    closingHour: '', // Separate field for closing hour
-    vendorId: vendorId || '', // Preselect the vendor if provided
-    image: null, // Initial value for the image
+    openingHour: '',
+    closingHour: '',
+    vendorId: vendorId || '',
+    image: null,
   });
 
   const [menuItems, setMenuItems] = useState([]);
@@ -46,7 +46,13 @@ const RestaurantForm = () => {
     openingHour: Yup.string().required('Opening Hour is required'),
     closingHour: Yup.string().required('Closing Hour is required'),
     vendorId: Yup.string().required('Vendor is required'),
-    image: Yup.mixed(), // Image is not mandatory
+    image: Yup.mixed().test('fileSize', 'Image size is too large, Should be less than 600KB', (value) => {
+      if (!value) return true; // No image selected is valid
+      return value.size <= 600 * 1024; // 600KB limit (600 * 1024 bytes)
+    }).test('fileType', 'Only image files are allowed', (value) => {
+      if (!value) return true; // No image selected is valid
+      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
+    }),
   });
 
   useEffect(() => {
@@ -68,7 +74,6 @@ const RestaurantForm = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
-        // sessionStorage.setItem(`restaurant-image-${id || 'new'}`, reader.result);
         setFieldValue('image', file);
       };
       reader.readAsDataURL(file);
@@ -110,7 +115,6 @@ const RestaurantForm = () => {
   };
 
   const menuItemColumns = [
-    // { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'price', headerName: 'Price', width: 150 },
     { field: 'category', headerName: 'Category', width: 150 },
@@ -210,6 +214,7 @@ const RestaurantForm = () => {
                   className="input-field-restaurantEdit"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
                 />
+                <ErrorMessage name="image" component="div" className="error-message-addMenuItem" />
                 {imagePreview && (
                   <div>
                     <img src={imagePreview} alt="Restaurant Preview" className="image-preview-restaurantEdit" />

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loadRestaurants, deleteRestaurantById, updateRestaurantById } from '../../Data/Restaurants';
 import { loadVendors } from '../../Data/Vendors';
 import { DataGrid } from '@mui/x-data-grid';
-import './styles.css'; // Import the CSS file
+import './styles.css';
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -52,11 +52,11 @@ const RestaurantList = () => {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'id', headerName: 'ID', width: 40 },
+    { field: 'name', headerName: 'Name', width: 180 },
     { field: 'description', headerName: 'Description', width: 300 },
-    { field: 'location', headerName: 'Location', width: 200 },
-    { field: 'vendorEmail', headerName: 'Vendor Email', width: 250 },
+    { field: 'location', headerName: 'Location', width: 110 },
+    { field: 'vendorEmail', headerName: 'Vendor Email', width: 200 },
     {
       field: 'actions',
       headerName: 'Actions',

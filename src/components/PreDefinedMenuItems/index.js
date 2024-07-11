@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addPreDefinedMenuItems, getPreDefinedMenuItemsById, updatePreDefinedMenuItemsById, loadPreDefinedMenuItems } from '../../Data/PreDefinedMenuItems';
 import { DataGrid } from '@mui/x-data-grid';
-import './styles.css'; // Import the CSS file
+import './styles.css';
 
 const PredefinedMenuItemForm = () => {
   const { menuItemId } = useParams();
@@ -13,7 +13,7 @@ const PredefinedMenuItemForm = () => {
     name: '',
     price: '',
     category: '',
-    image: null, // Initial value for the image
+    image: null,
   });
 
   const [imagePreview, setImagePreview] = useState(
@@ -24,7 +24,13 @@ const PredefinedMenuItemForm = () => {
     name: Yup.string().required('Name is required'),
     price: Yup.number().required('Price is required').positive('Price must be positive'),
     category: Yup.string().required('Category is required'),
-    image: Yup.mixed(), // Image is not mandatory
+    image: Yup.mixed().test('fileSize', 'Image size is too large, Should be less than 600KB', (value) => {
+      if (!value) return true; // No image selected is valid
+      return value.size <= 600 * 1024; // 600KB limit (600 * 1024 bytes)
+    }).test('fileType', 'Only image files are allowed', (value) => {
+      if (!value) return true; // No image selected is valid
+      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
+    }),
   });
 
   const handleImageChange = (e, setFieldValue) => {
@@ -33,7 +39,6 @@ const PredefinedMenuItemForm = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
-        // sessionStorage.setItem(`menu-item-${menuItemId || 'new'}`, reader.result);
         setFieldValue('image', file);
       };
       reader.readAsDataURL(file);
@@ -96,6 +101,7 @@ const PredefinedMenuItemForm = () => {
                   className="input-field-restaurantEdit"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
                 />
+                <ErrorMessage name="image" component="div" className="error-message-addMenuItem" />
                 {imagePreview && (
                   <div>
                     <img src={imagePreview} alt="Restaurant Preview" className="image-preview-restaurantEdit" />

@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   loadPreDefinedMenuItems,
   deletePreDefinedMenuItemsById
-} from '../../Data/PreDefinedMenuItems'; // Adjust import as per your file structure
-import './styles.css'; // Import the CSS file
+} from '../../Data/PreDefinedMenuItems';
+import './styles.css';
 
 const PreDefinedMenuItems = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,11 +14,11 @@ const PreDefinedMenuItems = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadedMenuItems = loadPreDefinedMenuItems(); // Ensure this function correctly loads data
+    const loadedMenuItems = loadPreDefinedMenuItems();
     setPreDefinedMenuItems(loadedMenuItems);
     setLoading(false);
   }, []);
-  
+
   // Function to handle menu item deletion
   const handleDeleteMenuItem = (id) => {
     deletePreDefinedMenuItemsById(id); // Update local storage or API
@@ -32,10 +32,9 @@ const PreDefinedMenuItems = () => {
     navigate(`/default-menu-items/add`);
   };
 
-  // Define columns for the DataGrid
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'id', headerName: 'ID', width: 40 },
+    { field: 'name', headerName: 'Name', width: 180 },
     { field: 'price', headerName: 'Price', width: 150 },
     { field: 'category', headerName: 'Category', width: 150 },
     {

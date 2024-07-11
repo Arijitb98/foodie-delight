@@ -23,6 +23,13 @@ const Sidebar = () => {
             </NavLink>
           </li>
         </ul>
+        <ul className="bottom">
+          <li>
+            <NavLink to="/settings" activeClassName="active">
+              Settings
+            </NavLink>
+          </li>
+        </ul>
       </nav>
     </div>
   );

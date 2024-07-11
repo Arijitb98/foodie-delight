@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { addVendor } from '../../Data/Vendors'; // Import addVendor function
-import './styles.css'; // Import the CSS file
+import { addVendor } from '../../Data/Vendors';
+import './styles.css';
 
 const AddVendor = () => {
   const navigate = useNavigate();

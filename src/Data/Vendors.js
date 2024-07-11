@@ -1,4 +1,4 @@
-// Mock data for vendors
+// Mock data
 export const mockVendors = [
   {
     id: 1,
