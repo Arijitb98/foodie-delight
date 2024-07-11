@@ -68,7 +68,7 @@ const ModifyVendor = () => {
 
   // Columns configuration for restaurants data grid
   const restaurantColumns = [
-    { field: 'id', headerName: 'ID', width: 40 },
+    // { field: 'id', headerName: 'ID', width: 40 },
     { field: 'name', headerName: 'Name', width: 180 },
     { field: 'location', headerName: 'Location', width: 200 },
     { field: 'contactNumber', headerName: 'Contact Number', width: 150 },

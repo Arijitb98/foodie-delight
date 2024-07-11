@@ -28,19 +28,18 @@ const PredefinedMenuItemForm = () => {
     name: Yup.string().required('Name is required'),
     price: Yup.number().required('Price is required').positive('Price must be positive'),
     category: Yup.string().required('Category is required'),
-    image: Yup.mixed().test('fileSize', 'Image size is too large, Should be less than 600KB', (value) => {
-      if (!value) return true; // No image selected is valid
-      return value.size <= 600 * 1024; // 600KB limit (600 * 1024 bytes)
-    }).test('fileType', 'Only image files are allowed', (value) => {
-      if (!value) return true; // No image selected is valid
-      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-    }),
   });
 
   // Function to handle image preview and set form field value
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 600 * 1024) {
+        // Display an error message or take appropriate action
+        alert('Image size is too large. Please select an image smaller than 600KB.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -66,13 +65,17 @@ const PredefinedMenuItemForm = () => {
     try {
       if (menuItemId) {
         await updatePreDefinedMenuItemsById(menuItemId, values); // Update existing menu item
-        sessionStorage.setItem(`preset-menu-item-${menuItemId}`, imagePreview); // Store image preview in session storage
+        if (values.image) {
+          sessionStorage.setItem(`preset-menu-item-${menuItemId}`, imagePreview); // Store image for new restaurant if image is provided
+        }
         alert('Menu item updated successfully!'); // Display success message
       } else {
         await addPreDefinedMenuItems(values); // Add new menu item
         const PreDefinedMenuItems = loadPreDefinedMenuItems(); // Load all predefined menu items
         const idNew = PreDefinedMenuItems.length ? PreDefinedMenuItems[PreDefinedMenuItems.length - 1].id : 1; // Generate new ID
-        sessionStorage.setItem(`preset-menu-item-${idNew}`, imagePreview); // Store image preview in session storage
+        if (values.image) {
+          sessionStorage.setItem(`preset-menu-item-${idNew}`, imagePreview); // Store image for new restaurant if image is provided
+        }
         alert('Menu item added successfully!'); // Display success message
       }
       navigate(`/menu-categories`); // Navigate to menu categories page after submission
@@ -117,6 +120,7 @@ const PredefinedMenuItemForm = () => {
                   id="image"
                   name="image"
                   className="input-field-restaurantEdit"
+                  accept="image/jpeg, image/png, image/gif"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
                 />
                 <ErrorMessage name="image" component="div" className="error-message-addMenuItem" />

@@ -125,3 +125,8 @@ Setup Instructions:
 Deployment:
 
 npm run build or yarn build
+
+
+Demo: 
+
+https://a56022e0-2471-492e-9bd2-6f914d5292b2.e1-eu-north-azure.choreoapps.dev/login

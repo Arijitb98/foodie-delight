@@ -58,18 +58,18 @@ describe('RestaurantForm Component', () => {
       </MemoryRouter>
     );
 
-    const submitButton = screen.queryByText(/add restaurant/i);
+    const submitButton = screen.getByText('Add restaurant' || 'Update restaurant');
     fireEvent.click(submitButton);
 
     // Check validation messages
     await waitFor(() => {
-      expect(screen.getByText(/name is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/description is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/location is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/phone number is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/opening hour is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/closing hour is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/vendor is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/name is required/i));
+      expect(screen.getByText(/description is required/i));
+      expect(screen.getByText(/location is required/i));
+      expect(screen.getByText(/phone number is required/i));
+      expect(screen.getByText(/opening hour is required/i));
+      expect(screen.getByText(/closing hour is required/i));
+      expect(screen.getByText(/vendor is required/i));
     });
   });
 
@@ -94,7 +94,7 @@ describe('RestaurantForm Component', () => {
       image: new File(['dummy content'], 'test.png', { type: 'image/png' }), // Mock image file
     };
 
-    const submitButton = screen.getByText(/add restaurant/i);
+    const submitButton = screen.getByText('Add restaurant' || 'Update restaurant');
     fireEvent.click(submitButton);
 
     // Check that addRestaurant function is called with correct arguments

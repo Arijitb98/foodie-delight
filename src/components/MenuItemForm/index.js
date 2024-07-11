@@ -31,13 +31,6 @@ const MenuItemForm = () => {
     name: Yup.string().required('Name is required'),
     price: Yup.number().required('Price is required').positive('Price must be positive'),
     category: Yup.string().required('Category is required'),
-    image: Yup.mixed().test('fileSize', 'Image size is too large, Should be less than 600KB', (value) => {
-      if (!value) return true; // No image selected is valid
-      return value.size <= 600 * 1024; // 600KB limit (600 * 1024 bytes)
-    }).test('fileType', 'Only image files are allowed', (value) => {
-      if (!value) return true; // No image selected is valid
-      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-    }),
   });
 
   // Effect to load pre-defined menu items
@@ -61,12 +54,18 @@ const MenuItemForm = () => {
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 600 * 1024) {
+        // Display an error message or take appropriate action
+        alert('Image size is too large. Please select an image smaller than 600KB.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Set image preview URL
-        setFieldValue('image', file); // Set formik field value for image
+        setImagePreview(reader.result);
+        setFieldValue('image', file);
       };
-      reader.readAsDataURL(file); // Read file as data URL
+      reader.readAsDataURL(file);
     }
   };
 
@@ -84,13 +83,17 @@ const MenuItemForm = () => {
   const onSubmit = (values, { setSubmitting }) => {
     if (menuItemId) {
       updateMenuItemById(restaurantId, menuItemId, values); // Update existing menu item
-      sessionStorage.setItem(`menu-item-${menuItemId}`, imagePreview); // Store image preview in session storage
+      if (values.image) {
+        sessionStorage.setItem(`menu-item-${menuItemId}`, imagePreview); // Store image in session storage if image is provided
+      }      
       alert('Menu item updated successfully!'); // Display success message
     } else {
       addMenuItem(restaurantId, values); // Add new menu item
       const menuItems = loadMenuItems(restaurantId); // Load all menu items
       const id = menuItems.length ? menuItems[menuItems.length - 1].id : 1; // Generate new ID
-      sessionStorage.setItem(`menu-item-${id}`, imagePreview); // Store image preview in session storage
+      if (values.image) {
+        sessionStorage.setItem(`menu-item-${id}`, imagePreview); // Store image in session storage if image is provided
+      }    
       alert('Menu item added successfully!'); // Display success message
     }
     navigate(`/restaurants/edit/${restaurantId}`); // Navigate back to restaurant edit page
@@ -175,6 +178,7 @@ const MenuItemForm = () => {
                   id="image"
                   name="image"
                   className="input-field-restaurantEdit"
+                  accept="image/jpeg, image/png, image/gif"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
                 />
                 <ErrorMessage name="image" component="div" className="error-message-addMenuItem" />

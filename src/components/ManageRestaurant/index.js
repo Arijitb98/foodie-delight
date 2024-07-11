@@ -53,13 +53,6 @@ const RestaurantForm = () => {
     openingHour: Yup.string().required('Opening Hour is required'),
     closingHour: Yup.string().required('Closing Hour is required'),
     vendorId: Yup.string().required('Vendor is required'),
-    image: Yup.mixed().test('fileSize', 'Image size is too large, Should be less than 600KB', (value) => {
-      if (!value) return true; // No image selected is valid
-      return value.size <= 600 * 1024; // 600KB limit (600 * 1024 bytes)
-    }).test('fileType', 'Only image files are allowed', (value) => {
-      if (!value) return true; // No image selected is valid
-      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-    }),
   });
 
   // Fetch initial data for existing restaurant when id changes
@@ -81,6 +74,12 @@ const RestaurantForm = () => {
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 600 * 1024) {
+        // Display an error message or take appropriate action
+        alert('Image size is too large. Please select an image smaller than 600KB.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -98,14 +97,18 @@ const RestaurantForm = () => {
     setTimeout(() => {
       if (id) {
         updateRestaurantById(id, values); // Update existing restaurant
-        sessionStorage.setItem(`restaurant-image-${id}`, imagePreview); // Store image in session storage
+        if (values.image) {
+          sessionStorage.setItem(`restaurant-image-${id}`, imagePreview); // Store image in session storage if image is provided
+        }
         alert('Restaurant updated successfully!'); // Alert on successful update
       } else {
         addRestaurant(values); // Add new restaurant
         const restaurants = loadRestaurants();
         const maxId = restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) : 0;
-        const idNew = maxId + 1;
-        sessionStorage.setItem(`restaurant-image-${idNew}`, imagePreview); // Store image for new restaurant
+        const idNew = maxId;
+        if (values.image) {
+          sessionStorage.setItem(`restaurant-image-${idNew}`, imagePreview); // Store image for new restaurant if image is provided
+        }
         alert('Restaurant added successfully!'); // Alert on successful addition
       }
 
@@ -244,6 +247,7 @@ const RestaurantForm = () => {
                   id="image"
                   name="image"
                   className="input-field-restaurantEdit"
+                  accept="image/jpeg, image/png, image/gif"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
                 />
                 <ErrorMessage name="image" component="div" className="error-message-addMenuItem" />
@@ -256,7 +260,7 @@ const RestaurantForm = () => {
 
               <div className="form-field-restaurantEdit">
                 <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting || formSubmitting}>
-                  {formSubmitting ? <CircularProgress size={24} /> : (id ? 'Update Restaurant' : 'Add Restaurant')}
+                  {formSubmitting ? <CircularProgress size={24} /> : (id ? 'Update restaurant' : 'Add restaurant')}
                 </button>
                 <button type="button" className="back-button-restaurantEdit" onClick={() => {
                   if (location.state && location.state.fromVendor) {
