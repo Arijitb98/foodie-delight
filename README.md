@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+FoodieDelight Admin Panel Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Overview
+FoodieDelight Admin Panel is a web application designed to manage restaurants, vendors and menu categories. It provides an interface for administrators to perform CRUD (Create, Read, Update, Delete) operations on various entities within the system.
 
-## Available Scripts
+Technologies Used
+Frontend:
 
-In the project directory, you can run:
+React.js
+React Router DOM for navigation
+Material-UI for UI components
+Formik and Yup for form handling and validation
 
-### `npm start`
+Backend:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Mock APIs for data management (CRUD operations)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+Components and Features:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  1. Login
 
-### `npm run build`
+Component: Login
+Description: Allows administrators to log in with email and password credentials. Implements validation for strong passwords.
+Screenshots:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/5ba54771-a506-4d4a-9147-046f93d9c2d3)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  2. Restaurant Management
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Component: RestaurantList, ManageRestaurant
+Description: Allows CRUD operations for restaurants, including adding new restaurants, editing existing ones, and deleting them.
+Screenshots:
 
-### `npm run eject`
+The landing screen after logging in shows the list of restaurts and various related info
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/247b978b-31c6-4833-9590-e017826d42cc)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Adding a new restaurant
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/58026e70-c96f-46ed-9f1e-c869ac953e2e)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Editng an existing restaurant
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/31a36744-08e2-4435-bd7c-80e2b255b6da)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Also view/edit and delete menu items of the restaurant
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/2f49f7ab-8f2d-49dc-9e4d-439442630424)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Add a new item from scratch or select a predefined menu item
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/be4b205d-a4da-4d2e-b65c-c73359a6b618)
 
-## Learn More
+  3.Vendor Management
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Component: VendorList, ModifyVendors
+Description: View/edit/add and delete vendors, displaying vendor details, number of associated restaurants and allowing CRUD operations.
+Screenshots:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Vendor list
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/8406efc4-7052-470e-85ad-18e568715fd4)
 
-### Code Splitting
+Modifying a vendor
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/710ce485-8333-4df2-bb11-58d726f643eb)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Adding new vendor
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/de54094c-ce79-4c57-94db-90f541757cb4)
 
-### Analyzing the Bundle Size
+  4.Menu Category Management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Component: PreDefinedMenuItems
+Description: Handles predeifned menu categories, including CRUD operations for adding, editing, and deleting menu items.
+Screenshots: 
 
-### Making a Progressive Web App
+Menu list
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/2b11812b-535f-4be6-9945-5f0d612a556e)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Editing a menu item
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/615c1cf6-5b8c-4713-8c0a-dfaa6b1c65cd)
 
-### Advanced Configuration
+Adding a new menu item
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/a0e830b3-27ba-4a4c-985c-60d9001a93bc)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  5.Settings
 
-### Deployment
+Component: Settings
+Description: Allows the user to modify their account settings, including email and password updates.
+Screenshots:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/8dce6ea7-58c7-4895-b4a2-505d4febc245)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Setup Instructions
+  1.Clone the Repository
+    Copy code
+    git clone <repository-url>
+    cd <repository-directory>
+
+  2.Install Dependencies
+    npm install or yarn
+
+  3.Start the Development Server
+    npm start or yarn start
+    
+  4.Access the Admin Panel
+    Open a web browser and navigate to http://localhost:3000 (assuming default port).
+    Log in with valid credentials to access the admin panel.
+
+
+Deployment
+npm run build or yarn build
