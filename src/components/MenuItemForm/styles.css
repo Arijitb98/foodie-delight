@@ -37,6 +37,13 @@
   border-radius: 4px;
 }
 
+.image-preview-restaurantEdit {
+  max-width: 60%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+}
+
 .error-message-addMenuItem {
   color: #ff0000;
   font-size: 14px;

@@ -35,9 +35,10 @@ const saveRestaurants = (restaurants) => {
 // Function to add a new restaurant
 export const addRestaurant = (newRestaurant) => {
   const restaurants = loadRestaurants();
-  const id = restaurants.length + 1;
+  const maxId = restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) : 0;
+  const id = maxId + 1;
   const restaurant = { id, ...newRestaurant };
-  const updatedRestaurants = [...restaurants, restaurant]; // Create a new array
+  const updatedRestaurants = [...restaurants, restaurant];
   saveRestaurants(updatedRestaurants);
 };
 

@@ -7,9 +7,6 @@ const dummyFoodData = {
     { id: 3, name: 'Sushi', price: 15.99, category: 'Japanese' },
     { id: 4, name: 'Salad', price: 8.99, category: 'Healthy' },
   ],
-  3: [
-    { id: 5, name: 'Steak', price: 19.99, category: 'Grill' },
-  ],
 };
 
 export default dummyFoodData;

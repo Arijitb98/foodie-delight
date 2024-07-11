@@ -22,7 +22,7 @@ const RestaurantList = () => {
         await Promise.all([loadedRestaurants, loadedVendors]);
 
         const restaurantsWithVendorEmail = loadedRestaurants.map((restaurant) => {
-          const vendor = loadedVendors.find((v) => v.id === restaurant.vendorId);
+          const vendor = loadedVendors.find((v) => v.id == restaurant.vendorId);
           return {
             ...restaurant,
             vendorEmail: vendor ? vendor.email : 'N/A'

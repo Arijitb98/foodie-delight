@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { addRestaurant, getRestaurantById, updateRestaurantById } from '../../Data/Restaurants';
+import { addRestaurant, getRestaurantById, updateRestaurantById, loadRestaurants } from '../../Data/Restaurants';
 import {
   loadMenuItems,
   addMenuItem,
@@ -20,6 +20,10 @@ const RestaurantForm = () => {
   const location = useLocation();
   const vendors = loadVendors();
   const { vendorId } = location.state || {};
+  const [imagePreview, setImagePreview] = useState(
+    sessionStorage.getItem(`restaurant-image-${id}`) || null
+  );
+
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -28,8 +32,9 @@ const RestaurantForm = () => {
     openingHour: '', // Separate field for opening hour
     closingHour: '', // Separate field for closing hour
     vendorId: vendorId || '', // Preselect the vendor if provided
-    image: null,
+    image: null, // Initial value for the image
   });
+
   const [menuItems, setMenuItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -41,7 +46,7 @@ const RestaurantForm = () => {
     openingHour: Yup.string().required('Opening Hour is required'),
     closingHour: Yup.string().required('Closing Hour is required'),
     vendorId: Yup.string().required('Vendor is required'),
-    image: Yup.mixed().test('fileSize', 'File Size is too large', value => !value || (value && value.size <= 1024 * 1024))
+    image: Yup.mixed(), // Image is not mandatory
   });
 
   useEffect(() => {
@@ -57,12 +62,30 @@ const RestaurantForm = () => {
     }
   }, [id, navigate]);
 
+  const handleImageChange = (e, setFieldValue) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        // sessionStorage.setItem(`restaurant-image-${id || 'new'}`, reader.result);
+        setFieldValue('image', file);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = (values, { setSubmitting }) => {
     if (id) {
       updateRestaurantById(id, values);
+      sessionStorage.setItem(`restaurant-image-${id}`, imagePreview);
       alert('Restaurant updated successfully!');
     } else {
       addRestaurant(values);
+      const restaurants = loadRestaurants();
+      const maxId = restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) : 0;
+      const idNew = maxId + 1;
+      sessionStorage.setItem(`restaurant-image-${idNew}`, imagePreview);
       alert('Restaurant added successfully!');
     }
     if (location.state && location.state.fromVendor) {
@@ -115,7 +138,7 @@ const RestaurantForm = () => {
       <div className="form-wrapper-restaurantEdit">
         <h2 className="form-title-restaurantEdit">{id ? 'Edit Restaurant' : 'Add Restaurant'}</h2>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <div className="form-field-restaurantEdit">
                 <label htmlFor="name" className="label-restaurantEdit">Name</label>
@@ -179,6 +202,22 @@ const RestaurantForm = () => {
               </div>
 
               <div className="form-field-restaurantEdit">
+                <label htmlFor="image" className="label-restaurantEdit">Image</label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  className="input-field-restaurantEdit"
+                  onChange={(e) => handleImageChange(e, setFieldValue)}
+                />
+                {imagePreview && (
+                  <div>
+                    <img src={imagePreview} alt="Restaurant Preview" className="image-preview-restaurantEdit" />
+                  </div>
+                )}
+              </div>
+
+              <div className="form-field-restaurantEdit">
                 <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting}>
                   {id ? 'Update Restaurant' : 'Add Restaurant'}
                 </button>
@@ -212,7 +251,7 @@ const RestaurantForm = () => {
           <DataGrid rows={filteredMenuItems} columns={menuItemColumns} pageSize={5} />
         </div>
       </div>
-      : <></>}
+        : <></>}
     </div>
   );
 };
