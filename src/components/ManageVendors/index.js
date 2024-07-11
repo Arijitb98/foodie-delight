@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addVendor } from '../../Data/Vendors';
 import './styles.css';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AddVendor = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigation utility from React Router
+  const [isLoading, setIsLoading] = useState(false); // State to manage loading state
 
+  // Initial form values
   const initialValues = {
     name: '',
     email: '',
     phone: '',
   };
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required').max(100, 'Name is too long'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -22,13 +26,23 @@ const AddVendor = () => {
       .required('Phone number is required'),
   });
 
-  const onSubmit = (values, { setSubmitting }) => {
-    addVendor(values); // Call addVendor function to add new vendor
-    alert('Vendor added successfully!');
-    navigate('/vendors'); // Navigate back to vendors list after adding
-    setSubmitting(false);
+  // Handle form submission
+  const onSubmit = async (values, { setSubmitting }) => {
+    setIsLoading(true); // Set loading state to true on form submission
+    try {
+      await addVendor(values); // Call addVendor function to add new vendor
+      alert('Vendor added successfully!'); // Display success message
+      navigate('/vendors'); // Navigate back to vendors list after adding
+    } catch (error) {
+      console.error('Error adding vendor:', error); // Log error to console
+      alert('Failed to add vendor. Please try again later.'); // Display error message
+    } finally {
+      setIsLoading(false); // Reset loading state after form submission
+      setSubmitting(false); // Set Formik submitting to false
+    }
   };
 
+  // Render the form for adding a new vendor
   return (
     <div className="form-container-addVendor">
       <div className="form-wrapper-addVendor">
@@ -36,6 +50,8 @@ const AddVendor = () => {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
           {({ isSubmitting }) => (
             <Form>
+              {isLoading && <CircularProgress />}
+
               <div className="form-field-addVendor">
                 <label htmlFor="name" className="label">Name</label>
                 <Field type="text" id="name" name="name" className="input-field-addVendor" />
@@ -52,8 +68,12 @@ const AddVendor = () => {
                 <ErrorMessage name="phone" component="div" className="error-message-addVendor" />
               </div>
               <div className="form-field-addVendor">
-                <button type="submit" className="submit-button-addVendor" disabled={isSubmitting}>Add Vendor</button>
-                <button type="button" className="back-button-addVendor" onClick={() => navigate('/vendors')}>Back</button>
+                <button type="submit" className="submit-button-addVendor" disabled={isSubmitting}>
+                  Add Vendor
+                </button>
+                <button type="button" className="back-button-addVendor" onClick={() => navigate('/vendors')}>
+                  Back
+                </button>
               </div>
             </Form>
           )}

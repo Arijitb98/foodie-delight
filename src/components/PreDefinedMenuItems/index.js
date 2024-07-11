@@ -3,12 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addPreDefinedMenuItems, getPreDefinedMenuItemsById, updatePreDefinedMenuItemsById, loadPreDefinedMenuItems } from '../../Data/PreDefinedMenuItems';
-import { DataGrid } from '@mui/x-data-grid';
+import CircularProgress from '@mui/material/CircularProgress';
 import './styles.css';
 
 const PredefinedMenuItemForm = () => {
-  const { menuItemId } = useParams();
-  const navigate = useNavigate();
+  const { menuItemId } = useParams(); // Fetching parameter from URL
+  const navigate = useNavigate(); // Navigation utility from React Router
+
+  // State variables
   const [initialValues, setInitialValues] = useState({
     name: '',
     price: '',
@@ -19,7 +21,9 @@ const PredefinedMenuItemForm = () => {
   const [imagePreview, setImagePreview] = useState(
     sessionStorage.getItem(`preset-menu-item-${menuItemId}`) || null
   );
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     price: Yup.number().required('Price is required').positive('Price must be positive'),
@@ -33,6 +37,7 @@ const PredefinedMenuItemForm = () => {
     }),
   });
 
+  // Function to handle image preview and set form field value
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
@@ -45,31 +50,42 @@ const PredefinedMenuItemForm = () => {
     }
   };
 
+  // Effect to fetch initial values when editing a menu item
   useEffect(() => {
     if (menuItemId) {
-      const menuItem = getPreDefinedMenuItemsById(menuItemId);
+      const menuItem = getPreDefinedMenuItemsById(menuItemId); // Fetch menu item by ID
       if (menuItem) {
-        setInitialValues(menuItem);
+        setInitialValues(menuItem); // Set initial form values with fetched menu item data
       }
     }
   }, [menuItemId]);
 
-  const onSubmit = (values, { setSubmitting }) => {
-    if (menuItemId) {
-      updatePreDefinedMenuItemsById(menuItemId, values);
-      sessionStorage.setItem(`preset-menu-item-${menuItemId}`, imagePreview);
-      alert('Menu item updated successfully!');
-    } else {
-      addPreDefinedMenuItems(values);
-      const PreDefinedMenuItems = loadPreDefinedMenuItems();
-      const idNew = PreDefinedMenuItems.length ? PreDefinedMenuItems[PreDefinedMenuItems.length - 1].id : 1; // Generate new id
-      sessionStorage.setItem(`preset-menu-item-${idNew}`, imagePreview);
-      alert('Menu item added successfully!');
+  // Function to handle form submission
+  const onSubmit = async (values, { setSubmitting }) => {
+    setIsLoading(true); // Set loading state to true
+    try {
+      if (menuItemId) {
+        await updatePreDefinedMenuItemsById(menuItemId, values); // Update existing menu item
+        sessionStorage.setItem(`preset-menu-item-${menuItemId}`, imagePreview); // Store image preview in session storage
+        alert('Menu item updated successfully!'); // Display success message
+      } else {
+        await addPreDefinedMenuItems(values); // Add new menu item
+        const PreDefinedMenuItems = loadPreDefinedMenuItems(); // Load all predefined menu items
+        const idNew = PreDefinedMenuItems.length ? PreDefinedMenuItems[PreDefinedMenuItems.length - 1].id : 1; // Generate new ID
+        sessionStorage.setItem(`preset-menu-item-${idNew}`, imagePreview); // Store image preview in session storage
+        alert('Menu item added successfully!'); // Display success message
+      }
+      navigate(`/menu-categories`); // Navigate to menu categories page after submission
+    } catch (error) {
+      console.error('Error:', error); // Log error if submission fails
+      alert('Failed to save menu item. Please try again later.'); // Display error message
+    } finally {
+      setIsLoading(false); // Set loading state to false
+      setSubmitting(false); // Set submitting state to false
     }
-    navigate(`/menu-categories`);
-    setSubmitting(false);
   };
 
+  // Render the form for adding or editing menu items
   return (
     <div className="form-container-addMenuItem">
       <div className="form-wrapper-addMenuItem">
@@ -77,6 +93,8 @@ const PredefinedMenuItemForm = () => {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
           {({ isSubmitting, setFieldValue }) => (
             <Form>
+              {isLoading && <CircularProgress />}
+
               <div className="form-field-addMenuItem">
                 <label htmlFor="name" className="label-addMenuItem">Name</label>
                 <Field type="text" id="name" name="name" className="input-field-addMenuItem" />
@@ -109,8 +127,12 @@ const PredefinedMenuItemForm = () => {
                 )}
               </div>
               <div className="form-field-addMenuItem">
-                <button type="submit" className="submit-button-addMenuItem" disabled={isSubmitting}>{menuItemId ? 'Update Menu Item' : 'Add Menu Item'}</button>
-                <button type="button" className="back-button-addMenuItem" onClick={() => navigate(`/menu-categories`)}>Back</button>
+                <button type="submit" className="submit-button-addMenuItem" disabled={isSubmitting}>
+                  {menuItemId ? 'Update Menu Item' : 'Add Menu Item'}
+                </button>
+                <button type="button" className="back-button-addMenuItem" onClick={() => navigate(`/menu-categories`)}>
+                  Back
+                </button>
               </div>
             </Form>
           )}

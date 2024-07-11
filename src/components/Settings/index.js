@@ -10,13 +10,20 @@ import './styles.css';
 const Settings = () => {
   const [credentials, setCredentials] = useState(null);
 
+  // Effect to load credentials on component mount
   useEffect(() => {
-    const storedCredentials = loadLoginCredentials();
-    setCredentials(storedCredentials.length > 0 ? storedCredentials[0] : null);
+    const fetchCredentials = async () => {
+      const storedCredentials = loadLoginCredentials();
+      setCredentials(storedCredentials.length > 0 ? storedCredentials[0] : null);
+    };
+
+    fetchCredentials();
   }, []);
 
+  // Initialize form values with fetched credentials or empty values
   const initialValues = credentials || { email: '', password: '' };
 
+  // Validation schema for Formik form
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required('Email is required'),
     password: Yup.string()
@@ -28,8 +35,10 @@ const Settings = () => {
       .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
   });
 
+  // Handle form submission
   const onSubmit = (values, { setSubmitting }) => {
     if (credentials) {
+      // Update credentials in storage
       updateLoginCredentialById(credentials.id, values);
       alert('Credentials updated successfully');
     } else {

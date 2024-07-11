@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loadRestaurants, deleteRestaurantById, updateRestaurantById } from '../../Data/Restaurants';
+import { loadRestaurants, deleteRestaurantById } from '../../Data/Restaurants';
 import { loadVendors } from '../../Data/Vendors';
 import { DataGrid } from '@mui/x-data-grid';
 import './styles.css';
@@ -52,7 +52,6 @@ const RestaurantList = () => {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 40 },
     { field: 'name', headerName: 'Name', width: 180 },
     { field: 'description', headerName: 'Description', width: 300 },
     { field: 'location', headerName: 'Location', width: 110 },
@@ -78,9 +77,13 @@ const RestaurantList = () => {
     restaurant.vendorEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Render loading indicator while data is loading
   if (loading) return <div>Loading...</div>;
+
+  // Render error message if there was an error loading data
   if (error) return <div>Error: {error}</div>;
 
+  // Render the component with the filtered restaurants in a data grid
   return (
     <div className="container">
       <div className="header1">

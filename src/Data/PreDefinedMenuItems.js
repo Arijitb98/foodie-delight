@@ -31,7 +31,7 @@ export const addPreDefinedMenuItems = (newPreDefinedMenuItems) => {
 // Function to update a PreDefinedMenuItems by ID
 export const updatePreDefinedMenuItemsById = (id, updatedPreDefinedMenuItems) => {
   const PreDefinedMenuItems = loadPreDefinedMenuItems();
-  const index = PreDefinedMenuItems.findIndex((PreDefinedMenuItems) => PreDefinedMenuItems.id === parseInt(id));
+  const index = PreDefinedMenuItems.findIndex((PreDefinedMenuItems) => PreDefinedMenuItems.id == parseInt(id));
   if (index !== -1) {
     PreDefinedMenuItems[index] = { ...PreDefinedMenuItems[index], ...updatedPreDefinedMenuItems };
     savePreDefinedMenuItems(PreDefinedMenuItems); // Save updated PreDefinedMenuItems
@@ -41,13 +41,13 @@ export const updatePreDefinedMenuItemsById = (id, updatedPreDefinedMenuItems) =>
 // Function to get a PreDefinedMenuItems by ID
 export const getPreDefinedMenuItemsById = (id) => {
   const PreDefinedMenuItems = loadPreDefinedMenuItems();
-  return PreDefinedMenuItems.find((PreDefinedMenuItems) => PreDefinedMenuItems.id === parseInt(id));
+  return PreDefinedMenuItems.find((PreDefinedMenuItems) => PreDefinedMenuItems.id == parseInt(id));
 };
 
 // Function to delete a PreDefinedMenuItems by ID
 export const deletePreDefinedMenuItemsById = (id) => {
   const PreDefinedMenuItems = loadPreDefinedMenuItems();
-  const index = PreDefinedMenuItems.findIndex((PreDefinedMenuItems) => PreDefinedMenuItems.id === id);
+  const index = PreDefinedMenuItems.findIndex((PreDefinedMenuItems) => PreDefinedMenuItems.id == id);
   if (index !== -1) {
     PreDefinedMenuItems.splice(index, 1); // Remove 1 element at index
     savePreDefinedMenuItems(PreDefinedMenuItems); // Save updated array to local storage

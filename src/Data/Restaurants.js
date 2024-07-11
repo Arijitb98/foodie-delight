@@ -45,7 +45,7 @@ export const addRestaurant = (newRestaurant) => {
 // Function to update a restaurant by ID
 export const updateRestaurantById = (id, updatedRestaurant) => {
   const restaurants = loadRestaurants();
-  const index = restaurants.findIndex((restaurant) => restaurant.id === parseInt(id));
+  const index = restaurants.findIndex((restaurant) => restaurant.id == parseInt(id));
   if (index !== -1) {
     restaurants[index] = { ...restaurants[index], ...updatedRestaurant };
     saveRestaurants(restaurants); // Save updated restaurants
@@ -55,13 +55,13 @@ export const updateRestaurantById = (id, updatedRestaurant) => {
 // Function to get a restaurant by ID
 export const getRestaurantById = (id) => {
   const restaurants = loadRestaurants();
-  return restaurants.find((restaurant) => restaurant.id === parseInt(id));
+  return restaurants.find((restaurant) => restaurant.id == parseInt(id));
 };
 
 // Function to delete a restaurant by ID
 export const deleteRestaurantById = (id) => {
   const restaurants = loadRestaurants();
-  const index = restaurants.findIndex((restaurant) => restaurant.id === id);
+  const index = restaurants.findIndex((restaurant) => restaurant.id == id);
   if (index !== -1) {
     restaurants.splice(index, 1); // Remove 1 element at index
     saveRestaurants(restaurants); // Save updated array to local storage

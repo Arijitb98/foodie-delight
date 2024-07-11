@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { addRestaurant, getRestaurantById, updateRestaurantById, loadRestaurants } from '../../Data/Restaurants';
 import {
   loadMenuItems,
@@ -15,15 +17,16 @@ import { loadVendors } from '../../Data/Vendors';
 import './styles.css';
 
 const RestaurantForm = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const vendors = loadVendors();
-  const { vendorId } = location.state || {};
+  const { id } = useParams(); // Get id from URL params
+  const navigate = useNavigate(); // Navigation utility from React Router
+  const location = useLocation(); // Location object to access state
+  const vendors = loadVendors(); // Load vendors from data source
+  const { vendorId } = location.state || {}; // Get vendorId from location state if present
   const [imagePreview, setImagePreview] = useState(
     sessionStorage.getItem(`restaurant-image-${id}`) || null
   );
 
+  // Form initial values and state management
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -35,9 +38,13 @@ const RestaurantForm = () => {
     image: null,
   });
 
+  // State for menu items, search query, loading indicators
   const [menuItems, setMenuItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true); // State for initial loading
+  const [formSubmitting, setFormSubmitting] = useState(false); // State for form submission
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required').max(100, 'Name is too long'),
     description: Yup.string().required('Description is required').max(500, 'Description is too long'),
@@ -55,19 +62,22 @@ const RestaurantForm = () => {
     }),
   });
 
+  // Fetch initial data for existing restaurant when id changes
   useEffect(() => {
     if (id) {
-      const restaurant = getRestaurantById(id);
+      const restaurant = getRestaurantById(id); // Get restaurant by id
       if (restaurant) {
-        setInitialValues(restaurant);
-        setMenuItems(loadMenuItems(id));
+        setInitialValues(restaurant); // Set initial form values
+        setMenuItems(loadMenuItems(id)); // Load menu items for the restaurant
       } else {
-        alert('Restaurant not found');
-        navigate('/restaurants');
+        alert('Restaurant not found'); // Alert if restaurant not found
+        navigate('/restaurants'); // Redirect to restaurants page
       }
     }
+    setLoading(false); // Set loading to false after initial data fetch (simulated)
   }, [id, navigate]);
 
+  // Handle image file selection and preview
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
@@ -80,27 +90,38 @@ const RestaurantForm = () => {
     }
   };
 
+  // Handle form submission
   const onSubmit = (values, { setSubmitting }) => {
-    if (id) {
-      updateRestaurantById(id, values);
-      sessionStorage.setItem(`restaurant-image-${id}`, imagePreview);
-      alert('Restaurant updated successfully!');
-    } else {
-      addRestaurant(values);
-      const restaurants = loadRestaurants();
-      const maxId = restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) : 0;
-      const idNew = maxId + 1;
-      sessionStorage.setItem(`restaurant-image-${idNew}`, imagePreview);
-      alert('Restaurant added successfully!');
-    }
-    if (location.state && location.state.fromVendor) {
-      navigate(`/vendors/edit/${location.state.vendorId}`);
-    } else {
-      navigate('/restaurants');
-    }
-    setSubmitting(false);
+    setFormSubmitting(true); // Start form submission loader
+
+    // Simulate async operation (e.g., API call)
+    setTimeout(() => {
+      if (id) {
+        updateRestaurantById(id, values); // Update existing restaurant
+        sessionStorage.setItem(`restaurant-image-${id}`, imagePreview); // Store image in session storage
+        alert('Restaurant updated successfully!'); // Alert on successful update
+      } else {
+        addRestaurant(values); // Add new restaurant
+        const restaurants = loadRestaurants();
+        const maxId = restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) : 0;
+        const idNew = maxId + 1;
+        sessionStorage.setItem(`restaurant-image-${idNew}`, imagePreview); // Store image for new restaurant
+        alert('Restaurant added successfully!'); // Alert on successful addition
+      }
+
+      // Redirect based on navigation state
+      if (location.state && location.state.fromVendor) {
+        navigate(`/vendors/edit/${location.state.vendorId}`);
+      } else {
+        navigate('/restaurants');
+      }
+
+      setFormSubmitting(false); // Stop form submission loader
+      setSubmitting(false); // Set Formik submitting to false
+    }, 1000); // Simulated delay for 1 second
   };
 
+  // Navigation functions for menu items
   const handleAddMenuItem = () => {
     navigate(`/restaurants/${id}/menu-item/add`);
   };
@@ -110,10 +131,11 @@ const RestaurantForm = () => {
   };
 
   const handleDeleteMenuItem = (menuItemId) => {
-    deleteMenuItemById(id, menuItemId);
-    setMenuItems(loadMenuItems(id));
+    deleteMenuItemById(id, menuItemId); // Delete menu item
+    setMenuItems(loadMenuItems(id)); // Reload menu items
   };
 
+  // Columns configuration for menu item data grid
   const menuItemColumns = [
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'price', headerName: 'Price', width: 150 },
@@ -131,12 +153,22 @@ const RestaurantForm = () => {
     },
   ];
 
-  // Filter menu items based on the search query
+  // Filter menu items based on search query
   const filteredMenuItems = menuItems.filter((menuItem) =>
     menuItem.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     menuItem.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Render loading indicator while data is being fetched
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Render form with Formik for restaurant details and menu items
   return (
     <div className="form-container-restaurantEdit">
       <div className="form-wrapper-restaurantEdit">
@@ -223,8 +255,8 @@ const RestaurantForm = () => {
               </div>
 
               <div className="form-field-restaurantEdit">
-                <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting}>
-                  {id ? 'Update Restaurant' : 'Add Restaurant'}
+                <button type="submit" className="submit-button-restaurantEdit" disabled={isSubmitting || formSubmitting}>
+                  {formSubmitting ? <CircularProgress size={24} /> : (id ? 'Update Restaurant' : 'Add Restaurant')}
                 </button>
                 <button type="button" className="back-button-restaurantEdit" onClick={() => {
                   if (location.state && location.state.fromVendor) {

@@ -8,57 +8,65 @@ import { DataGrid } from '@mui/x-data-grid';
 import './styles.css';
 
 const ModifyVendor = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { id } = useParams(); // Fetching parameter from URL
+  const navigate = useNavigate(); // Navigation utility from React Router
+  const location = useLocation(); // Location object to manage location state
+
+  // State variables
   const [initialValues, setInitialValues] = useState({
     name: '',
     email: '',
     phoneNumber: '',
   });
-  const [restaurants, setRestaurants] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [restaurants, setRestaurants] = useState([]); // State for restaurants
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required').max(100, 'Name is too long'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     phoneNumber: Yup.string().matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits').required('Phone number is required')
   });
 
+  // Effect to fetch vendor and associated restaurants on component mount
   useEffect(() => {
     const fetchVendorAndRestaurants = async () => {
-      const vendor = getVendorById(id);
+      const vendor = getVendorById(id); // Fetch vendor by ID
       if (vendor) {
-        setInitialValues(vendor);
+        setInitialValues(vendor); // Set initial form values with fetched vendor data
       } else {
-        alert('Vendor not found');
-        navigate('/vendors');
+        alert('Vendor not found'); // Alert if vendor is not found
+        navigate('/vendors'); // Navigate back to vendors list
       }
 
-      const allRestaurants = loadRestaurants();
-      const vendorRestaurants = allRestaurants.filter(restaurant => restaurant.vendorId == parseInt(id));
-      setRestaurants(vendorRestaurants);
+      const allRestaurants = loadRestaurants(); // Load all restaurants
+      const vendorRestaurants = allRestaurants.filter(restaurant => restaurant.vendorId == parseInt(id)); // Filter restaurants for the vendor
+      setRestaurants(vendorRestaurants); // Set filtered restaurants to state
     };
 
-    fetchVendorAndRestaurants();
+    fetchVendorAndRestaurants(); // Call fetchVendorAndRestaurants function on component mount
   }, [id, navigate]);
 
+  // Handle form submission
   const onSubmit = (values, { setSubmitting }) => {
-    updateVendorById(id, values);
-    alert('Vendor updated successfully!');
-    navigate('/vendors');
-    setSubmitting(false);
+    updateVendorById(id, values); // Update vendor with new values
+    alert('Vendor updated successfully!'); // Display success message
+    navigate('/vendors'); // Navigate back to vendors list
+    setSubmitting(false); // Set submitting state to false
   };
 
+  // Handle restaurant deletion
   const handleDeleteRestaurant = (restaurantId) => {
-    deleteRestaurantById(restaurantId);
-    setRestaurants(restaurants.filter(restaurant => restaurant.id !== restaurantId));
+    deleteRestaurantById(restaurantId); // Delete restaurant by ID
+    setRestaurants(restaurants.filter(restaurant => restaurant.id !== restaurantId)); // Update restaurants state after deletion
   };
 
+  // Navigate to add restaurant page
   const handleAddRestaurant = () => {
-    navigate('/restaurants/add', { state: { vendorId: id, returnTo: location.pathname } });
+    navigate('/restaurants/add', { state: { vendorId: id, returnTo: location.pathname } }); // Navigate to add restaurant page with vendor ID in state
   };
 
+  // Columns configuration for restaurants data grid
   const restaurantColumns = [
     { field: 'id', headerName: 'ID', width: 40 },
     { field: 'name', headerName: 'Name', width: 180 },
@@ -89,6 +97,7 @@ const ModifyVendor = () => {
     restaurant.contactNumber.includes(searchQuery)
   );
 
+  // Render the modify vendor form and associated restaurants
   return (
     <div className="form-container-modifyVendor">
       <div className="form-wrapper-modifyVendor">

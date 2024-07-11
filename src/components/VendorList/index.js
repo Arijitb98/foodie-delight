@@ -33,9 +33,9 @@ const VendorList = () => {
     alert('Vendor deleted successfully');
   };
 
-  // Define columns for the DataGrid
+  // Columns configuration for the DataGrid component
   const columns = [
-    { field: 'id', headerName: 'ID', width: 40 },
+    // { field: 'id', headerName: 'ID', width: 40 },
     { field: 'name', headerName: 'Name', width: 180 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'restaurantCount', headerName: 'Number of Restaurants', width: 200 },
@@ -44,6 +44,7 @@ const VendorList = () => {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
+        // Custom rendering for Actions column with Edit and Delete buttons
         <>
           <Link to={`/vendors/edit/${params.row.id}`} style={{ marginRight: 8 }}>Edit</Link>
           <button onClick={() => handleDeleteVendor(params.row.id)}>Delete</button>

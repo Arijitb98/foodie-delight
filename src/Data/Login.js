@@ -26,7 +26,7 @@ export const addLoginCredential = (newCredential) => {
 // Function to update a login credential by ID
 export const updateLoginCredentialById = (id, updatedCredential) => {
   const credentials = loadLoginCredentials();
-  const index = credentials.findIndex((c) => c.id === id);
+  const index = credentials.findIndex((c) => c.id == id);
   if (index !== -1) {
     credentials[index] = { ...credentials[index], ...updatedCredential };
     saveLoginCredentials(credentials);
@@ -36,7 +36,7 @@ export const updateLoginCredentialById = (id, updatedCredential) => {
 // Function to get a login credential by ID
 export const getLoginCredentialById = (id) => {
   const credentials = loadLoginCredentials();
-  return credentials.find((c) => c.id === id);
+  return credentials.find((c) => c.id == id);
 };
 
 // Function to delete a login credential by ID

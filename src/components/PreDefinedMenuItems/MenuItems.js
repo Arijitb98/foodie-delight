@@ -13,27 +13,29 @@ const PreDefinedMenuItems = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Effect to load menu items when component mounts
   useEffect(() => {
-    const loadedMenuItems = loadPreDefinedMenuItems();
-    setPreDefinedMenuItems(loadedMenuItems);
-    setLoading(false);
+    const loadedMenuItems = loadPreDefinedMenuItems(); // Load predefined menu items
+    setPreDefinedMenuItems(loadedMenuItems); // Set loaded items to state
+    setLoading(false); // Update loading state once items are loaded
   }, []);
 
   // Function to handle menu item deletion
   const handleDeleteMenuItem = (id) => {
-    deletePreDefinedMenuItemsById(id); // Update local storage or API
-    // Reload menu items after deletion
+    deletePreDefinedMenuItemsById(id); // Delete item from storage or API
+    // Filter out the deleted item from state
     const updatedMenuItems = preDefinedMenuItems.filter(item => item.id !== id);
-    setPreDefinedMenuItems(updatedMenuItems);
-    alert('Menu item deleted successfully');
+    setPreDefinedMenuItems(updatedMenuItems); // Update state with filtered items
+    alert('Menu item deleted successfully'); // Display deletion success message
   };
 
+  // Function to navigate to add menu item page
   const handleAddMenuItem = () => {
     navigate(`/default-menu-items/add`);
   };
 
+  // Columns configuration for the data grid
   const columns = [
-    { field: 'id', headerName: 'ID', width: 40 },
     { field: 'name', headerName: 'Name', width: 180 },
     { field: 'price', headerName: 'Price', width: 150 },
     { field: 'category', headerName: 'Category', width: 150 },
@@ -56,8 +58,10 @@ const PreDefinedMenuItems = () => {
     menuItem.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Render loading indicator while data is loading
   if (loading) return <div>Loading...</div>;
 
+  // Render the component with the filtered menu items in a data grid
   return (
     <div className="container">
       <div className="header1">

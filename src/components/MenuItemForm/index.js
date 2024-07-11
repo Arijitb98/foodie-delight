@@ -8,22 +8,25 @@ import './styles.css';
 import { loadPreDefinedMenuItems } from '../../Data/PreDefinedMenuItems';
 
 const MenuItemForm = () => {
-  const { restaurantId, menuItemId } = useParams();
-  const navigate = useNavigate();
+  const { restaurantId, menuItemId } = useParams(); // Fetch parameters from the URL
+  const navigate = useNavigate(); // Navigation utility from React Router
+
+  // State variables
   const [initialValues, setInitialValues] = useState({
     name: '',
     price: '',
     category: '',
     image: null,
   });
-  const [preDefinedMenuItems, setPreDefinedMenuItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [preDefinedMenuItems, setPreDefinedMenuItems] = useState([]); // State for pre-defined menu items
+  const [filteredItems, setFilteredItems] = useState([]); // State for filtered pre-defined menu items
+  const [loading, setLoading] = useState(true); // Loading state
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
   const [imagePreview, setImagePreview] = useState(
     sessionStorage.getItem(`menu-item-${menuItemId}`) || null
-  );
+  ); // State for image preview
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     price: Yup.number().required('Price is required').positive('Price must be positive'),
@@ -37,69 +40,75 @@ const MenuItemForm = () => {
     }),
   });
 
+  // Effect to load pre-defined menu items
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         setLoading(true);
-        const loadedMenuItems = await loadPreDefinedMenuItems();
-        setPreDefinedMenuItems(loadedMenuItems);
+        const loadedMenuItems = await loadPreDefinedMenuItems(); // Load pre-defined menu items
+        setPreDefinedMenuItems(loadedMenuItems); // Set loaded menu items to state
       } catch (error) {
-        console.error("Error loading menu items:", error);
+        console.error("Error loading menu items:", error); // Log error if fetching fails
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading state to false
       }
     };
 
-    fetchMenuItems();
+    fetchMenuItems(); // Call fetchMenuItems function on component mount
   }, []);
 
+  // Handle image change and preview
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setFieldValue('image', file);
+        setImagePreview(reader.result); // Set image preview URL
+        setFieldValue('image', file); // Set formik field value for image
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Read file as data URL
     }
   };
 
+  // Effect to set initial values for editing existing menu item
   useEffect(() => {
     if (menuItemId) {
-      const menuItem = getMenuItemById(restaurantId, menuItemId);
+      const menuItem = getMenuItemById(restaurantId, menuItemId); // Fetch menu item by ID
       if (menuItem) {
-        setInitialValues(menuItem);
+        setInitialValues(menuItem); // Set initial form values for editing
       }
     }
   }, [menuItemId, restaurantId]);
 
+  // Handle form submission
   const onSubmit = (values, { setSubmitting }) => {
     if (menuItemId) {
-      updateMenuItemById(restaurantId, menuItemId, values);
-      sessionStorage.setItem(`menu-item-${menuItemId}`, imagePreview);
-      alert('Menu item updated successfully!');
+      updateMenuItemById(restaurantId, menuItemId, values); // Update existing menu item
+      sessionStorage.setItem(`menu-item-${menuItemId}`, imagePreview); // Store image preview in session storage
+      alert('Menu item updated successfully!'); // Display success message
     } else {
-      addMenuItem(restaurantId, values);
-      const menuItems = loadMenuItems(restaurantId);
-      const id = menuItems.length ? menuItems[menuItems.length - 1].id : 1; // Generate new id
-      sessionStorage.setItem(`menu-item-${id}`, imagePreview);
-      alert('Menu item added successfully!');
+      addMenuItem(restaurantId, values); // Add new menu item
+      const menuItems = loadMenuItems(restaurantId); // Load all menu items
+      const id = menuItems.length ? menuItems[menuItems.length - 1].id : 1; // Generate new ID
+      sessionStorage.setItem(`menu-item-${id}`, imagePreview); // Store image preview in session storage
+      alert('Menu item added successfully!'); // Display success message
     }
-    navigate(`/restaurants/edit/${restaurantId}`);
-    setSubmitting(false);
+    navigate(`/restaurants/edit/${restaurantId}`); // Navigate back to restaurant edit page
+    setSubmitting(false); // Set submitting state to false
   };
 
+  // Handle adding preset food item to menu
   const handleAddPresetFoodItem = (foodItem) => {
     const newMenuItem = {
       ...foodItem,
       restaurantId: restaurantId
     };
-    addMenuItem(restaurantId, newMenuItem);
-    alert(`Preset food item "${foodItem.name}" added successfully!`);
-    navigate(`/restaurants/edit/${restaurantId}`);
+    addMenuItem(restaurantId, newMenuItem); // Add preset food item as new menu item
+    alert(`Preset food item "${foodItem.name}" added successfully!`); // Display success message
+    navigate(`/restaurants/edit/${restaurantId}`); // Navigate back to restaurant edit page
   };
 
+  // Columns configuration for preset food items data grid
   const presetFoodColumns = [
     { field: 'name', headerName: 'Name', width: 180 },
     { field: 'price', headerName: 'Price', width: 100 },
@@ -119,22 +128,24 @@ const MenuItemForm = () => {
     },
   ];
 
+  // Effect to filter preset food items based on search query
   useEffect(() => {
-    // Filter preset food items based on search query
-    if (searchQuery.trim() === '') {
-      setFilteredItems(preDefinedMenuItems);
+    if (searchQuery.trim() == '') {
+      setFilteredItems(preDefinedMenuItems); // Set filtered items to all pre-defined menu items
     } else {
       const filtered = preDefinedMenuItems.filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredItems(filtered);
+      setFilteredItems(filtered); // Set filtered items based on search query
     }
   }, [searchQuery, preDefinedMenuItems]);
 
+  // Handle search input change
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value); // Update search query state
   };
 
+  // Render the form for adding/editing menu items
   return (
     <div className="form-container-addMenuItem">
       <div className="form-wrapper-addMenuItem">

@@ -54,7 +54,7 @@ describe('RestaurantList Component', () => {
       expect(getByText(restaurant.name)).toBeInTheDocument();
       expect(getByText(restaurant.description)).toBeInTheDocument();
       expect(getByText(restaurant.location)).toBeInTheDocument();
-      const vendorEmail = mockVendors.find((vendor) => vendor.id === restaurant.vendorId)?.email || 'N/A';
+      const vendorEmail = mockVendors.find((vendor) => vendor.id == restaurant.vendorId)?.email || 'N/A';
       expect(getByText(vendorEmail)).toBeInTheDocument();
     });
 
