@@ -1,15 +1,18 @@
 FoodieDelight Admin Panel Documentation
 
 Overview
+
 FoodieDelight Admin Panel is a web application designed to manage restaurants, vendors and menu categories. It provides an interface for administrators to perform CRUD (Create, Read, Update, Delete) operations on various entities within the system.
 
 Technologies Used
+
 Frontend:
 
-React.js
-React Router DOM for navigation
-Material-UI for UI components
+React.js, 
+React Router DOM for navigation, 
+Material-UI for UI components, 
 Formik and Yup for form handling and validation
+
 
 Backend:
 
@@ -20,16 +23,20 @@ Components and Features:
 
   1. Login
 
-Component: Login
+Component: Login. 
+
 Description: Allows administrators to log in with email and password credentials. Implements validation for strong passwords.
+
 Screenshots:
 
 ![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/5ba54771-a506-4d4a-9147-046f93d9c2d3)
 
   2. Restaurant Management
 
-Component: RestaurantList, ManageRestaurant
+Component: RestaurantList, ManageRestaurant. 
+
 Description: Allows CRUD operations for restaurants, including adding new restaurants, editing existing ones, and deleting them.
+
 Screenshots:
 
 The landing screen after logging in shows the list of restaurts and various related info
@@ -49,8 +56,10 @@ Add a new item from scratch or select a predefined menu item
 
   3.Vendor Management
 
-Component: VendorList, ModifyVendors
+Component: VendorList, ModifyVendors. 
+
 Description: View/edit/add and delete vendors, displaying vendor details, number of associated restaurants and allowing CRUD operations.
+
 Screenshots:
 
 Vendor list
@@ -64,8 +73,10 @@ Adding new vendor
 
   4.Menu Category Management
 
-Component: PreDefinedMenuItems
+Component: PreDefinedMenuItems.
+
 Description: Handles predeifned menu categories, including CRUD operations for adding, editing, and deleting menu items.
+
 Screenshots: 
 
 Menu list
@@ -79,29 +90,38 @@ Adding a new menu item
 
   5.Settings
 
-Component: Settings
+Component: Settings. 
+
 Description: Allows the user to modify their account settings, including email and password updates.
+
 Screenshots:
 
 ![image](https://github.com/Arijitb98/foodie-delight/assets/73586389/8dce6ea7-58c7-4895-b4a2-505d4febc245)
 
 
-Setup Instructions
+Setup Instructions:
+
   1.Clone the Repository
-    Copy code
-    git clone <repository-url>
-    cd <repository-directory>
+    
+    git clone https://github.com/Arijitb98/foodie-delight.git
 
   2.Install Dependencies
+  
     npm install or yarn
 
   3.Start the Development Server
+  
     npm start or yarn start
     
   4.Access the Admin Panel
-    Open a web browser and navigate to http://localhost:3000 (assuming default port).
-    Log in with valid credentials to access the admin panel.
+  
+  Open a web browser and navigate to(assuming default port).
+    
+    http://localhost:3000 
+    
+  Log in with valid credentials to access the admin panel.
 
 
-Deployment
+Deployment:
+
 npm run build or yarn build
